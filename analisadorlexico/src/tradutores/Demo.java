@@ -1,3 +1,5 @@
+package tradutores;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ class TokenTable extends ArrayList<Token> {
 
     public Token searchByToken (String token) {
          for (int x=0; x < this.size(); x++)
-            if (this.get(x).getName().equals(token)) {return this.get(x);}
+            if (this.get(x).getToken().equals(token)) {return this.get(x);}
         return null;
 }
 

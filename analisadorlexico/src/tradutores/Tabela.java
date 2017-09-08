@@ -1,3 +1,5 @@
+package tradutores;
+
 
 public class Tabela {
 	private String lexema;

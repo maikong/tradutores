@@ -1,3 +1,5 @@
+package tradutores;
+
 import java.util.*;
 
 public class ListaTabela {
