@@ -4,7 +4,7 @@
 <Ponto, .>
 <ID, println>
 <ParenteseLeft, (>
-<ST, "Olá!">
+<ST, "Olï¿½!">
 <ParenteseRight, )>
 <PontoVirgula, ;>
 <ID, System>
@@ -13,7 +13,7 @@
 <Ponto, .>
 <ID, println>
 <ParenteseLeft, (>
-<ST, "Olá!">
+<ST, "Olï¿½!">
 <ParenteseRight, )>
 <PontoVirgula, ;>
 <ID, System>
@@ -22,6 +22,6 @@
 <Ponto, .>
 <ID, println>
 <ParenteseLeft, (>
-<ST, "Olá!">
+<ST, "Olï¿½!">
 <ParenteseRight, )>
 <PontoVirgula, ;>

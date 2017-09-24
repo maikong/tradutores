@@ -16,7 +16,7 @@ public class Leitor {
 			e.printStackTrace();
 		}
 
-		// lê primeiro caracter
+		// lï¿½ primeiro caracter
 		caracterAtual = read();
 	}
 
@@ -29,7 +29,7 @@ public class Leitor {
 		}
 	}
     
-    // verifica se é um número
+    // verifica se ï¿½ um nï¿½mero
     private boolean isNumero(char c) {
 		if (c >= '0' && c <= '9')
 			return true;
@@ -37,7 +37,7 @@ public class Leitor {
 		return false;
 	}
     
-    // verifica se é caracter incluído no alfabeto
+    // verifica se ï¿½ caracter incluï¿½do no alfabeto
     private boolean isLetra(char c){
 		if(c>='a' && c<='z' )
 		return true;
@@ -52,7 +52,7 @@ public class Leitor {
 		int state = 1; // status inicial
 		int bufferNumeros = 0; // buffer de numeros
 		String bufferLetras = ""; // buffer de letras
-		int bufferDecimal=0;//buffer número decimal
+		int bufferDecimal=0;//buffer nï¿½mero decimal
         
 		boolean skipped = false;
 		
@@ -81,6 +81,7 @@ public class Leitor {
 					case '\f':
 					case '\r':
 					case '\t':
+					
 						caracterAtual = read(); // caso for algum case acima, ignora
 						continue;
 					case '=':
@@ -121,15 +122,15 @@ public class Leitor {
 				}
 					
 						
-			// identificador de números	inicial	
+			// identificador de nï¿½meros	inicial	
 			case 2:
 				if (isNumero(caracterAtual)) {
 					bufferNumeros = 0; // Reseta o buffer
 					bufferNumeros += (caracterAtual - '0');
-					state = 3; //continua para saber se tem mais números                 
-					caracterAtual = read(); //lê proximo caracter                       
+					state = 3; //continua para saber se tem mais nï¿½meros                 
+					caracterAtual = read(); //lï¿½ proximo caracter                       
 				} else {
-					state=5; // se não for número pular para case 5
+					state=5; // se nï¿½o for nï¿½mero pular para case 5
 				}
 				continue;
 
@@ -143,13 +144,13 @@ public class Leitor {
                                         
 				}else if(caracterAtual=='.'){
 					caracterAtual = read();	 
-					state = 4; //número decimal
+					state = 4; //nï¿½mero decimal
 				}else {
 					return new Token("NM", "" + bufferNumeros);
 				}
 				continue;
 				
-			// identificador de números decimais inicial
+			// identificador de nï¿½meros decimais inicial
 			case 4:
 				if (isNumero(caracterAtual)) {
 					bufferDecimal = 0;
@@ -158,17 +159,17 @@ public class Leitor {
 					caracterAtual = read();	
                                         
 				}else {
-					return new Token("ERROR", "Invalid input: "+bufferNumeros+"." );
+					return new Token("ERROR", "Invalid input: "+bufferNumeros+". " );
 				}
 				continue;
-			// números decimais
+			// nï¿½meros decimais
 			case 7:
 				if (isNumero(caracterAtual)) {
 					bufferDecimal *= 10;
 					bufferDecimal += (caracterAtual - '0');
 					caracterAtual = read();
 				} else {
-					return new Token("NM", "" + bufferNumeros+"."+bufferDecimal);
+					return new Token("NM", "" + bufferNumeros+". "+bufferDecimal);
 				}
 				continue;
 
@@ -183,7 +184,7 @@ public class Leitor {
 					bufferLetras = "";
 				    bufferLetras += caracterAtual;
 				    caracterAtual = read();
-					return new Token("ERROR", "Invalid input:"+bufferLetras);
+					return new Token("ERROR", "Invalid input: "+bufferLetras);
 				}
 				continue;	
 			
