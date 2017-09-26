@@ -10,7 +10,7 @@ public class Teste {
 		String outFile = "";
 		
 		//prover tabela fixa na classe ListaTabela..
-		ListaTabela tabela = new ListaTabela("/Users/kim/Documents/GitHub/tradutores/analisador_lexico/ReservedWords");
+		ListaTabela tabela = new ListaTabela("ReservedWords");
 		
 		
 		jfc.setDialogTitle("selecione o arquivo de entrada");
