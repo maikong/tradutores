@@ -134,7 +134,7 @@ public class Leitor {
 				}
 				continue;
 
-			// numeros
+			// identifica numeros
 			case 3:
 				if (isNumero(caracterAtual)) {
 					bufferNumeros *= 10;
@@ -146,11 +146,11 @@ public class Leitor {
 					caracterAtual = read();	 
 					state = 4; //n�mero decimal
 				}else {
-					return new Token("NM", "" + bufferNumeros);
+					return new Token("Number", "" + bufferNumeros);
 				}
 				continue;
 				
-			// identificador de n�meros decimais inicial
+			// monta e retorna numeros inteiro
 			case 4:
 				if (isNumero(caracterAtual)) {
 					bufferDecimal = 0;
@@ -162,18 +162,18 @@ public class Leitor {
 					return new Token("ERROR", "Invalid input: "+bufferNumeros+". " );
 				}
 				continue;
-			// n�meros decimais
+			// numeros decimais
 			case 7:
 				if (isNumero(caracterAtual)) {
 					bufferDecimal *= 10;
 					bufferDecimal += (caracterAtual - '0');
 					caracterAtual = read();
 				} else {
-					return new Token("NM", "" + bufferNumeros+". "+bufferDecimal);
+					return new Token("Number", "" + bufferNumeros+". "+bufferDecimal);
 				}
 				continue;
 
-			// identificador de palavras inicial
+			// identificador de palavras
 			case 5:
 				if(isLetra(caracterAtual)|| caracterAtual=='_'){
 				bufferLetras = "";					
@@ -188,7 +188,7 @@ public class Leitor {
 				}
 				continue;	
 			
-			// palavras ou variaveis
+			// monta e retorna token de palavras ou variaveis
 			case 6:
 				if ((isLetra(caracterAtual) || isNumero(caracterAtual) || caracterAtual=='_')) {
 					bufferLetras += caracterAtual;
@@ -204,17 +204,20 @@ public class Leitor {
 			// if ==
 			case 8:
 				if(caracterAtual=='='){
+					bufferLetras = "==";
 					caracterAtual = read();
-					return new Token("EQ","==");
+					return tabela.search(bufferLetras);
 				}
 				else {
-					return new Token("AO","=");
+					bufferLetras = "=";
+					return tabela.search(bufferLetras);
 				}
 			//if !=
 			case 9: 
 				if(caracterAtual=='='){
+					bufferLetras = "!=";
 					caracterAtual = read();
-					return new Token("NE","!=");
+					return tabela.search(bufferLetras);
 				}
 				else {
 					return new Token("ERROR", "Invalid input: !");
@@ -222,8 +225,9 @@ public class Leitor {
 			// if &&
 			case 10: 
 				if(caracterAtual=='&'){
+					bufferLetras = "&&";
 					caracterAtual = read();
-					return new Token("LA","&&");
+					return tabela.search(bufferLetras);
 				}
 				else {
 					return new Token("ERROR", "Invalid input: &");
@@ -231,8 +235,9 @@ public class Leitor {
 			// if || 
 			case 11: 
 				if(caracterAtual=='|'){
+					bufferLetras = "||";
 					caracterAtual = read();
-					return new Token("LO","||");
+					return tabela.search(bufferLetras);
 				}
 				else {
 					return new Token("ERROR", "Invalid input: |");
@@ -240,7 +245,7 @@ public class Leitor {
 			case 13:
 				if(caracterAtual=='"'){
 					caracterAtual=read();
-					return new Token("ST","\""+bufferLetras+"\"");
+					return new Token("Sring","\""+bufferLetras+"\"");
 				} else if(caracterAtual=='\n' || caracterAtual==EOF){
 					caracterAtual = read();
 					return new Token("ERROR","Invalid string literal");
@@ -249,8 +254,6 @@ public class Leitor {
 					caracterAtual = read();
 				}
 				continue;
-            //alphaBuffer += curr;
-            //curr = read();
                          
             case 14:
             	if(caracterAtual=='/'){
@@ -258,8 +261,9 @@ public class Leitor {
             		caracterAtual=read();
             	} else if(caracterAtual=='*') {
             		state = 16;
+            		bufferLetras = "/";
             		caracterAtual = read();
-            	} else return new Token("DO", "/");
+            	} else return tabela.search(bufferLetras);
             	continue;
             
             case 15:
@@ -288,11 +292,3 @@ public class Leitor {
 		}
 	}
 }
-    
-    
-    
-    
-    
-    
-    
-    
