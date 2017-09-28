@@ -33,7 +33,7 @@ public class Teste {
 			Token t;
 
 			while ((t = leitor.nextToken(tabela)) != null) {
-				writer.write("{"+t.getToken()+", "+t.getLexema()+"}");
+				writer.write("["+t.getToken()+", "+t.getLexema()+"]");
 			}
 
 			writer.close(); 
