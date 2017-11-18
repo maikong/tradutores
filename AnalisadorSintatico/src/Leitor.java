@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package analisadorsintatico;
 /**
  *
  * @author SAYMONLA
@@ -15,6 +15,8 @@ public class Leitor {
     
     private BufferedReader reader; // Leitor
     private char caracterAtual; // caracter atual
+    
+    int contLinha = 1; //contador de linhas
 
     private static final char EOF = (char) (-1);
 
@@ -27,7 +29,7 @@ public class Leitor {
             e.printStackTrace();
         }
 
-	// l� primeiro caracter
+	// lï¿½ primeiro caracter
 	caracterAtual = read();
     }
 
@@ -56,7 +58,7 @@ public class Leitor {
         else return false;
     }
     
-    public List listaTokens(){
+    public ArrayList<Token> listaTokens(){
         ArrayList<Token> lista = new ArrayList();
         Token t;
         t = nextToken();
@@ -72,7 +74,6 @@ public class Leitor {
 	String bufferLetras = ""; // buffer de letras
         int bufferNumeros = 0; //buffer numeros
         int bufferDecimal = 0; //buffer decimal
-        int contLinha = 1; //contador de linhas
         
 	boolean skipped = false;
 		
@@ -102,7 +103,7 @@ public class Leitor {
                         caracterAtual = read(); // caso for algum case acima, ignora
                         continue;
                     case '\n':
-                        contLinha ++;
+                        contLinha++;
                         caracterAtual = read();
                         continue;
                     default:
@@ -115,7 +116,7 @@ public class Leitor {
                 if (isNumero(caracterAtual)) {
                     bufferNumeros = 0; // Reseta o buffer
                     bufferNumeros += (caracterAtual - '0');
-                    state = 3; //continua para saber se tem mais n�meros                 
+                    state = 3; //continua para saber se tem mais nï¿½meros                 
                     caracterAtual = read(); //le proximo caracter                       
 		} else {
                     state=6; // se nao for numero pular para case 6
@@ -132,7 +133,7 @@ public class Leitor {
                     caracterAtual = read();	 
                     state = 4; //numero decimal
 		} else {
-                    return new Token("Number", "" + bufferNumeros, contLinha);
+                    return new Token("num", "" + bufferNumeros, contLinha);
 		}
 		continue;
 				
@@ -155,7 +156,7 @@ public class Leitor {
                     bufferDecimal += (caracterAtual - '0');
                     caracterAtual = read();
 		} else {
-                    return new Token("Number", "" + bufferNumeros+". "+bufferDecimal, contLinha);
+                    return new Token("num", "" + bufferNumeros+". "+bufferDecimal, contLinha);
 		}
 		continue;
 
