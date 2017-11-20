@@ -17,6 +17,7 @@ public class Sintatico {
     private Posicao posicao; //variavel com posicao da sonda
     private int contLinha = 0; // contador de linha
     private int index = 0;
+    private char sentido = 'F'; // vaiavel que guarda o sentido atual da sonda
     
     public Sintatico(String file){
         Leitor leitor = new Leitor(file); //inicializa leitor
@@ -71,24 +72,26 @@ public class Sintatico {
     
     private void comando(int i){ // metodo para comando
         if(i<2){
-            System.out.println("ERRO SINTÁTICO! COMANDO NÃO SEGUE REGRA DA GRAMÁTICA DE basico comando basico! LINHA: " + lista.get(i).getLinha());
+            System.out.println("ERRO SINTÁTICO! COMANDO NÃO SEGUE REGRA DA GRAMÁTICA DE 'basico comando basico'! LINHA: " + lista.get(i).getLinha());
             index++;
         }
         else{
             switch(lista.get(i).getLexema()){
                 case "APOS":
                     if(basico2(i+1) && basico2(i-2)){
-                        index = index + 2;
+                        index = index + 3;
                     }
                     else {
                         System.out.println("ERRO SINTÁTICO! COMANDO NÃO SEGUE REGRA DA GRAMÁTICA DE basico comando basico! LINHA: " + lista.get(i).getLinha());
+                        index++;
                     }
                 case "ENTAO":
                     if(basico2(i-2) && basico2(i+1)){
-                        index = index + 2;
+                        index = index + 3;
                     }
                     else {
                         System.out.println("ERRO SINTÁTICO! COMANDO NÃO SEGUE REGRA DA GRAMÁTICA DE basico comando basico! LINHA: " + lista.get(i).getLinha());
+                        index++;
                     }
             }
         }
@@ -96,11 +99,13 @@ public class Sintatico {
     
     private boolean basico(int i){ // metodo para basico
         if(i<lista.size()-2 && lista.get(i+2).getToken() == "comando" && lista.get(i+2).getLinha() == lista.get(i).getLinha()){
-            comando(i+2);
+            index = index + 2;
+            comando(index);
             return true;
         }
-        else if(lista.get(i+1).getToken() == "num" && lista.get(i).getLinha() == lista.get(i+1).getLinha()){ // verifica se proximo token e um numero e se esta na mesma linha
-           return basico2(i);
+        else if(basico2(i)){
+            index = index + 2;
+            return true;
         }
         else{
             System.out.println("ERRO SINTÁTICO! COMANDO BÁSICO NÃO É SEGUIDO POR UM NÚMERO! LINHA: " + lista.get(i).getLinha());
@@ -111,28 +116,113 @@ public class Sintatico {
     
     private boolean basico2 (int i){
          int n = Integer.parseInt(lista.get(i+1).getLexema());
+         if(lista.get(i+1).getToken() == "num" && lista.get(i).getLinha() == lista.get(i+1).getLinha()){
             switch(lista.get(i).getLexema()){ // verifica qual comando basico foi solicitado e atualiza a posicao
                 case "FRENTE":
-                    posicao.setY(posicao.getY()+n);
-                    index = index + 2;
+                    setPosicao(n, 'F');
+                    System.out.println("Comando: FRENTE " + n + " executado! " + index);
                     return true;
                 case "TRAS":
-                    posicao.setY(posicao.getY()-n);
-                    index = index + 2;
+                    setPosicao(n, 'T');
+                    System.out.println("Comando: TRAS " + n + " executado! " + index);
                     return true;
                 case "DIREITA":
-                    posicao.setX(posicao.getX()+n);
-                    index = index + 2;
+                    setPosicao(n, 'D');
+                    System.out.println("Comando: DIREITA " + n + " executado! " + index);
                     return true;
                 case "ESQUERDA":
-                    posicao.setX(posicao.getX()-n);
-                    index = index + 2;
+                    setPosicao(n, 'E');
+                    System.out.println("Comando: ESQUERDA " + n + " executado! " + index);
                     return true;
                 default:
                     System.out.println("ERRO LÉXICO");
-                    index++;
                     return false;
             }
+         }
+         else {
+            return false;
+         }
+    }
+    
+    private void setPosicao(int n, char s){
+        switch(sentido){
+            case 'F':
+                switch(s){
+                    case 'F':
+                        posicao.setY(posicao.getY()+n);
+                        sentido = 'F';
+                        break;
+                    case 'D':
+                        posicao.setX(posicao.getX()+n);
+                        sentido = 'D';
+                        break;
+                    case 'T':
+                        posicao.setY(posicao.getY()-n);
+                        sentido = 'T';
+                        break;
+                    case 'E':
+                        posicao.setX(posicao.getX()-n);
+                        sentido = 'E';
+                        break;
+                }
+            case 'D':
+                switch(s){
+                    case 'F':
+                        posicao.setX(posicao.getX()+n);
+                        sentido = 'D';
+                        break;
+                    case 'D':
+                        posicao.setY(posicao.getY()-n);
+                        sentido = 'T';
+                        break;
+                    case 'T':
+                        posicao.setX(posicao.getX()-n);
+                        sentido = 'E';
+                        break;
+                    case 'E':
+                        posicao.setY(posicao.getY()+n);
+                        sentido = 'F';
+                        break;
+                }
+            case 'T':
+                switch(s){
+                    case 'F':
+                        posicao.setY(posicao.getY()-n);
+                        sentido = 'T';
+                        break;
+                    case 'D':
+                        posicao.setX(posicao.getX()-n);
+                        sentido = 'E';
+                        break;
+                    case 'T':
+                        posicao.setY(posicao.getY()+n);
+                        sentido = 'F';
+                        break;
+                    case 'E':
+                        posicao.setX(posicao.getX()+n);
+                        sentido = 'D';
+                        break;
+                }
+            case 'E':
+                switch(s){
+                    case 'F':
+                        posicao.setX(posicao.getX()-n);
+                        sentido = 'E';
+                        break;
+                    case 'D':
+                        posicao.setY(posicao.getY()+n);
+                        sentido = 'F';
+                        break;
+                    case 'T':
+                        posicao.setX(posicao.getX()+n);
+                        sentido = 'D';
+                        break;
+                    case 'E':
+                        posicao.setY(posicao.getY()-n);
+                        sentido = 'T';
+                        break;
+                }
+        }
     }
     
     public void l_paren(int i){
