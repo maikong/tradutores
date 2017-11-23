@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package analisadorsintatico;
+
 /**
  *
  * @author SAYMONLA
@@ -106,6 +106,12 @@ public class Leitor {
                         contLinha++;
                         caracterAtual = read();
                         continue;
+                    case '(':
+                        caracterAtual = read();
+                        return new Token("l_paren", "(", contLinha);
+                    case ')':
+                        caracterAtual = read();
+                        return new Token("r_paren", ")", contLinha);    
                     default:
 	              	state = 2; // checar nova possibilidade
 		}
@@ -199,13 +205,7 @@ public class Leitor {
                             
                         case "ESQUERDA":
                             return new Token("basico", "ESQUERDA", contLinha);
-                            
-                        case "(":
-                            return new Token("l_paren", "(", contLinha);
-                            
-                        case ")":
-                            return new Token("r_paren", ")", contLinha);
-                            
+   
                         default:
                             return new Token("ERROR", "Invalid input:" + bufferLetras, contLinha);
                     }
